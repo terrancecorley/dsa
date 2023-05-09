@@ -29,7 +29,7 @@ function swap(arr, index1, index2) {
 // }
 
 // Big O is O n squared unless mostly sorted
-// Good algo for taking in "live" data/streaming/sorting numbers live
+// Good algo for taking in "live" data/strea  ming/sorting numbers live
 function insertionSort(arr) {
     for (let i = 1; i < arr.length; i++) {
         let currentElement = arr[i];
