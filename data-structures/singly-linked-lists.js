@@ -100,6 +100,71 @@ class SinglyLinkedList {
 
         return nodeToReturn;
     }
+
+    set(index, value) {
+        const nodeToSet = this.get(index);
+        if (!nodeToSet) return undefined;
+
+        nodeToSet.value = value;
+        return true;
+    }
+
+    insert(index, value) {
+        if (index < 0 || index > this.length) return undefined;
+
+        if (index === 0) {
+            this.unshift(value);
+            return true;
+        }
+
+        if (index === this.length) {
+            this.push(value);
+            return true;
+        }
+
+        const prevNode = this.get(index - 1);
+
+        const prevNodeNext = prevNode.next;
+        const newNode = new Node(value);
+        prevNode.next = newNode;
+        newNode.next = prevNodeNext;
+
+        this.length++;
+        return true;
+    }
+
+    remove(index) {
+        if (index < 0 || index >= this.length) return undefined;
+        if (index === 0) {
+            return this.shift();
+        }
+        if (index === this.length - 1) {
+            return this.pop();
+        }
+        const prevItem = this.get(index - 1);
+        const nodeToRemove = prevItem.next;
+        prevItem.next = prevItem.next.next;
+        this.length--;
+        return nodeToRemove;
+    }
+
+    reverse() {
+        let node = this.head;
+        this.head = this.tail;
+        this.tail = node;
+
+        let next;
+        let prev = null;
+
+        for (let i = 0; i < this.length; i++) {
+            next = node.next;
+            node.next = prev;
+            prev = node;
+            node = next;
+        }
+
+        return this;
+    }
 }
 
 const newList = new SinglyLinkedList();
