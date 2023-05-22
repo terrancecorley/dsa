@@ -19,6 +19,17 @@
 // Insertion - O(log n), but if more single-sided then O(n)
 // Searching - O(log n), but if more single-sided then O(n)
 
+// * Traversal
+// Breadth first search (bfs), searching levels/siblings first
+// Depth first search (dfs), searching one side side all the way through first
+
+// * BFS vs DFS
+// time complexity is the same between the two
+// really wide tree, bfs would take up more space
+// really long tree, dfs would take up more space
+// DFS - inOrder, for a binary search tree we will retrieve results in order
+// DFS - preOrder, could be used to export a tree structure
+
 class Node {
     constructor(value) {
         this.value = value;
@@ -83,11 +94,103 @@ class BST {
             }
         }
     }
+
+    bfs() {
+        if (!this.root) return undefined;
+
+        const queue = [];
+        const visited = [];
+        let node = this.root
+        queue.push(node);
+        while(queue.length) {
+            node = queue.shift();
+            visited.push(node.value);
+            if (node.left) {
+                queue.push(node.left);
+            }
+            if (node.right) {
+                queue.push(node.right);
+            }
+        }
+
+        return visited;
+    }
+
+    // * Pushing as you node visit
+    dfsPreOrder() {
+        if (!this.root) return undefined;
+
+        const visited = [];
+
+        function traverse(node) {
+            visited.push(node.value);
+
+            if (node.left) {
+                traverse(node.left);
+            }
+
+            if (node.right) {
+                traverse(node.right);
+            }
+        }
+
+        traverse(this.root);
+        return visited;
+    }
+
+    // * Pushing after last node visit
+    dfsPostOrder() {
+        if (!this.root) return undefined;
+
+        const visited = [];
+
+        function traverse(node) {
+            if (node.left) {
+                traverse(node.left);
+            }
+
+            if (node.right) {
+                traverse(node.right);
+            }
+
+            visited.push(node.value);
+        }
+
+        traverse(this.root);
+        return visited;
+    }
+
+    // * Pushing after exhausting the left, then right, as we go
+    dfsInOrder() {
+        if (!this.root) return undefined;
+
+        const visited = [];
+
+        function traverse(node) {
+            if (node.left) {
+                traverse(node.left);
+            }
+
+            visited.push(node.value);
+
+            if (node.right) {
+                traverse(node.right);
+            }
+        }
+
+        traverse(this.root);
+        return visited;
+    }
 }
 
 const tree = new BST();
 tree.insert(5);
 tree.insert(1);
 tree.insert(10);
+tree.insert(7);
+tree.insert(3);
 console.log(tree.find(10))
 console.log(tree)
+console.log(tree.bfs())
+console.log(tree.dfsPreOrder())
+console.log(tree.dfsPostOrder())
