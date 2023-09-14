@@ -33,64 +33,48 @@
 // Takes up more space (in sparse graphs)
 // Slower to iterate over all edges
 
-// Undirected Graph Class
-class Graph {
+class UndirectedGraph {
     constructor() {
         this.adjacencyList = {};
     }
 
     addVertex(vertex) {
-        // method does not handle dulicates, in real world we would probalby want to handle them
-        this.adjacencyList[vertex] = [];
+        if (!this.adjacencyList.hasOwnProperty(vertex)) {
+            this.adjacencyList[vertex] = [];
+        }
     }
 
-    removeVertex(vertex) {
-        // method does not contain error handling
-        while (this.adjacencyList[vertex].length) {
-            let adjacentVertex = this.adjacencyList[vertex].pop();
-            this.removeEdge(vertex, adjacentVertex);
-        }
-
-        delete this.adjacencyList[vertex];
-    } 
-
+    // todo: add err handling for invalid vertices
     addEdge(vertex1, vertex2) {
-        // method does not contain error handling
-        // In a directed graph we would only push onto one array since the edge would have a direction 
         this.adjacencyList[vertex1].push(vertex2);
         this.adjacencyList[vertex2].push(vertex1);
     }
 
+    // todo: add err handling for invalid vertices
     removeEdge(vertex1, vertex2) {
-        // method does not contain error handling
-        // In a directed graph we would only remove from one array since the edge would have a direction
-        // Could use es6 .filter method
-        for (let i = 0; i < this.adjacencyList[vertex1].length; i++) {
-            let currentValue = this.adjacencyList[vertex1][i];
-            if (currentValue === vertex2) {
-                this.adjacencyList[vertex1].splice(i, 1);
-                break;
-            }
-        }
-
-        for (let i = 0; i < this.adjacencyList[vertex2].length; i++) {
-            let currentValue = this.adjacencyList[vertex2][i];
-            if (currentValue === vertex1) {
-                this.adjacencyList[vertex2].splice(i, 1);
-                break;
-            }
-        }
+        this.adjacencyList[vertex1] = this.adjacencyList[vertex1].filter((item) => item !== vertex2);
+        this.adjacencyList[vertex2] = this.adjacencyList[vertex2].filter((item) => item !== vertex1);
     }
-}
 
-const g = new Graph();
-g.addVertex('tokyo');
-g.addVertex('san diego');
-g.addVertex('new york');
-g.addEdge('san diego', 'new york');
-console.log(g)
-g.removeVertex('san diego');
-console.log(g)
+    // todo: add err handling for invalid vertices
+    removeVertex(vertex) {
+        const vertexList = this.adjacencyList[vertex];
+        for (let i = 0; i < vertexList.length; i++) {
+            this.removeEdge(vertexList[i], vertex);
+        }
 
-const test = [1, 2];
-console.log(test[test.length - 1])
+        delete this.adjacencyList[vertex];
+    }
+};
+
+const graphy = new UndirectedGraph();
+graphy.addVertex('san diego');
+graphy.addVertex('san diego');
+graphy.addVertex('tokyo');
+graphy.addVertex('tempe');
+graphy.addEdge('san diego', 'tokyo');
+graphy.addEdge('tempe', 'tokyo');
+graphy.addEdge('san diego', 'tempe');
+graphy.removeEdge('san diego', 'tokyo');
+graphy.removeVertex('tempe');
+console.log(graphy);
