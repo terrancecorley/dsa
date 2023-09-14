@@ -1,10 +1,12 @@
 // * What is a graph?
 // A graph consists of nodes and connections (edges) between them
+// Every tree is a graph, but not every graph is a tree
 
 // * What are some examples that may use graphs?
 // social networks
 // recommendations 
 // map routing 
+// shortest path
 
 // * Essential graph terms
 // Vertex - a node
