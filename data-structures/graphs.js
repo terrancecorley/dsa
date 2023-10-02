@@ -67,16 +67,85 @@ class UndirectedGraph {
 
         delete this.adjacencyList[vertex];
     }
+
+    dfsRecursive(start) {
+        const result = [];
+        const visited = {};
+        const adjacencyList = this.adjacencyList;
+
+        (function dfs(vertex) {
+            if (!vertex) return;
+            visited[vertex] = true;
+            result.push(vertex);
+            adjacencyList[vertex].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    return dfs(neighbor);
+                }
+            })
+        })(start);
+
+        return result;
+    }
+
+    dfsIterative(start) {
+        const stack = [start];
+        const result = [];
+        const visited = {};
+        let currentVertex;
+        
+        visited[start] = true;
+        while (stack.length) {
+            currentVertex = stack.pop();
+            result.push(currentVertex);
+
+            this.adjacencyList[currentVertex].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    stack.push(neighbor);
+                }
+            })
+        }
+
+        return result;
+    }
+
+    bfsIterative(start) {
+        const queue = [start];
+        const result = [];
+        const visited = {};
+        let currentVertex;
+        
+        visited[start] = true;
+        while (queue.length) {
+            currentVertex = queue.shift();
+            result.push(currentVertex);
+
+            this.adjacencyList[currentVertex].forEach(neighbor => {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.push(neighbor);
+                }
+            })
+        }
+
+        return result;
+    }
 };
 
 const graphy = new UndirectedGraph();
-graphy.addVertex('san diego');
-graphy.addVertex('san diego');
-graphy.addVertex('tokyo');
-graphy.addVertex('tempe');
-graphy.addEdge('san diego', 'tokyo');
-graphy.addEdge('tempe', 'tokyo');
-graphy.addEdge('san diego', 'tempe');
-graphy.removeEdge('san diego', 'tokyo');
-graphy.removeVertex('tempe');
-console.log(graphy);
+graphy.addVertex('A');
+graphy.addVertex('B');
+graphy.addVertex('C');
+graphy.addVertex('D');
+graphy.addVertex('E');
+graphy.addVertex('F');
+graphy.addEdge('A', 'B');
+graphy.addEdge('A', 'C');
+graphy.addEdge('B', 'D');
+graphy.addEdge('C', 'E');
+graphy.addEdge('D', 'E');
+graphy.addEdge('D', 'F');
+graphy.addEdge('E', 'F');
+console.log(graphy.dfsRecursive('A'));
+console.log(graphy.dfsIterative('A'));
+console.log(graphy.bfsIterative('A'));
